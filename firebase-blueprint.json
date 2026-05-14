@@ -1,0 +1,61 @@
+{
+  "entities": {
+    "Book": {
+      "title": "Book",
+      "description": "A book in the library collection",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "author": { "type": "string" },
+        "isbn": { "type": "string" },
+        "category": { "type": "string" },
+        "status": { "type": "string", "enum": ["available", "loaned", "damaged", "lost"] },
+        "coverUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "author", "status"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "A student registered in the library",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "studentId": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "studentId"]
+    },
+    "Loan": {
+      "title": "Loan",
+      "description": "A record of a book loan",
+      "type": "object",
+      "properties": {
+        "bookId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "loanDate": { "type": "string", "format": "date-time" },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "returnDate": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "returned", "overdue"] },
+        "notes": { "type": "string" }
+      },
+      "required": ["bookId", "studentId", "loanDate", "dueDate", "status"]
+    }
+  },
+  "firestore": {
+    "books": {
+      "schema": "Book",
+      "description": "Collection of books"
+    },
+    "students": {
+      "schema": "Student",
+      "description": "Collection of students"
+    },
+    "loans": {
+      "schema": "Loan",
+      "description": "Collection of loan records"
+    }
+  }
+}

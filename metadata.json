@@ -1,0 +1,8 @@
+{
+  "name": "BiblioFlow",
+  "description": "Sistema inteligente de registro e agendamento de empréstimos de livros para bibliotecários.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
