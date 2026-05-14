@@ -3,47 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
-import { 
-  onAuthStateChanged, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signOut,
-  User
-} from 'firebase/auth';
-import { 
-  collection, 
-  query, 
-  onSnapshot, 
-  orderBy,
-  addDoc,
-  updateDoc,
-  doc,
-  Timestamp,
-  where,
-  getDocs,
-  getDoc
-} from 'firebase/firestore';
+import React, { useState } from 'react';
 import { 
   Book as BookIcon, 
   Users, 
-  Calendar, 
   Plus, 
-  Library, 
-  LogOut, 
   Search, 
-  AlertCircle,
-  CheckCircle2,
   Clock,
-  ChevronRight,
-  Filter,
   FileText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-import { auth, db } from './lib/firebase';
 import { cn } from './lib/utils';
-import { handleFirestoreError } from './lib/error-handler';
 import { 
   Book, 
   Student, 
@@ -61,67 +32,7 @@ import LoanForm from './components/LoanForm';
 import LoanList from './components/LoanList';
 
 export default function App() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'loans' | 'books' | 'students' | 'new-loan'>('dashboard');
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  const handleLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
-
-  const handleLogout = () => signOut(auth);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#E4E3E0] flex items-center justify-center font-mono text-sm uppercase tracking-widest">
-        <motion.div
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          Carregando BiblioFlow...
-        </motion.div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-indigo-50 flex flex-col items-center justify-center p-6">
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="vibrant-card p-12 max-w-md w-full text-center"
-        >
-          <div className="flex justify-center mb-8">
-            <div className="w-20 h-20 bg-amber-400 rounded-3xl flex items-center justify-center shadow-lg shadow-amber-200">
-              <Library size={48} className="text-indigo-900" />
-            </div>
-          </div>
-          <h1 className="text-5xl font-black text-indigo-950 tracking-tighter mb-2">BiblioTech</h1>
-          <p className="font-medium text-slate-400 mb-10">Sistema de Gestão Vibrante para Bibliotecários</p>
-          <button 
-            onClick={handleLogin}
-            className="vibrant-button-primary w-full flex items-center justify-center gap-3"
-          >
-            Acessar Sistema
-          </button>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-indigo-50 flex font-sans text-indigo-950">
@@ -171,24 +82,14 @@ export default function App() {
 
         <div className="space-y-6">
           <div className="bg-indigo-800 rounded-3xl p-5 flex items-center gap-4 border border-indigo-600/30">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-600 overflow-hidden flex-shrink-0">
-               {user.photoURL ? (
-                 <img src={user.photoURL} alt={user.displayName || ''} referrerPolicy="no-referrer" />
-               ) : (
-                 <div className="w-full h-full flex items-center justify-center text-white font-bold">{user.displayName?.charAt(0)}</div>
-               )}
+            <div className="w-10 h-10 rounded-2xl bg-indigo-600 overflow-hidden flex-shrink-0 flex items-center justify-center text-white font-bold text-xs">
+               BIB
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-bold text-white truncate">{user.displayName}</p>
-              <p className="text-[10px] uppercase font-black text-indigo-300 truncate">Administrador</p>
+              <p className="text-sm font-bold text-white truncate">Bibliotecário</p>
+              <p className="text-[10px] uppercase font-black text-indigo-300 truncate">Acesso Livre</p>
             </div>
           </div>
-          <button 
-            onClick={handleLogout}
-            className="w-full text-center py-2 text-indigo-300 font-black text-[10px] uppercase tracking-widest hover:text-white transition-colors flex items-center justify-center gap-2"
-          >
-            <LogOut size={14} /> Sair do Sistema
-          </button>
         </div>
       </aside>
 
